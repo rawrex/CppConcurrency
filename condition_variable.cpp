@@ -71,6 +71,18 @@ void data_processing_thread()
 	}
 }
 
+
+// Fundamentally, std::condition_variable::wait is an optimization over a busy-wait.
+// Conforming but less than ideal implementation of the wait method
+template<typename Predicate>
+void minimal_wait(std::unique_lock<std::mutex>& lk, Predicate pred)
+{
+	while(!pred()){
+		lk.unlock();
+		lk.lock();
+	}
+}
+
 int main () {
 	JThread t1(data_processing_thread);	
 	JThread t2(data_preparation_thread);	
