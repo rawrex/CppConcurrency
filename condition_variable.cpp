@@ -1,6 +1,8 @@
 #include <condition_variable>
+#include <iostream>
 #include <mutex>
 #include <queue>
+#include "JThread.h"
 
 class DataChunk {};
 std::mutex mtx;
@@ -8,6 +10,7 @@ std::queue<DataChunk> data_queue;
 std::condition_variable data_cond;
 bool there_is_more_data() { return true; }
 bool is_last_chunk(const DataChunk&) { return true; }
+void process(const DataChunk & dt) {}
 const DataChunk prepare_data() { return DataChunk(); }
 
 void data_preparation_thread()
@@ -37,7 +40,12 @@ void data_processing_thread()
 		std::unique_lock<std::mutex> lk(mtx);
 
 		// We pass the lock and lambda that expresses the condition we wait on 
-		data_cond.wait(lk, []{ return !data_queue.empty(); });
+		data_cond.wait(lk, []{ 
+			// The condition may be tested intermedaite amount of times
+			// Due to spurious wakes
+			std::cout << "wait()" << std::endl; 
+			return !data_queue.empty(); 
+		});
 
 		// If the condition isn’t satisfied (the lambda returned false),
 		// wait() unlocks the mutex and puts the thread in a blocked or waiting state. 
@@ -61,4 +69,9 @@ void data_processing_thread()
 		process(data);
 		if(is_last_chunk(data)) break;
 	}
+}
+
+int main () {
+	JThread t1(data_processing_thread);	
+	JThread t2(data_preparation_thread);	
 }
