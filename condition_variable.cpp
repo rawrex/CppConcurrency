@@ -14,6 +14,7 @@ void data_preparation_thread()
 {
 	while(there_is_more_data())
 	{
+		// We prepare the data without owning the mutex
 		const DataChunk data = prepare_data();
 
 		// Narrow down the scope in which we lock the mutex
@@ -32,9 +33,9 @@ void data_processing_thread()
 {
 	while(true)
 	{
+		// Note the use of unique_lock instead of plain lock_guard
 		std::unique_lock<std::mutex> lk(mtx);
 
-		// The call to wait() on the cond.variable
 		// We pass the lock and lambda that expresses the condition we wait on 
 		data_cond.wait(lk, []{ return !data_queue.empty(); });
 
@@ -49,12 +50,14 @@ void data_processing_thread()
 
 		// If we are here, then the condition has been satisfied
 		// and there's at least one element in the queue
-		DataChunk data = data_queue.front();
+		const DataChunk data = data_queue.front();
 		data_queue.pop();
 		
 		// We unlock the mutex to do the processing,
 		// since we have a copy of the data
 		lk.unlock();
+
+		// Do the work and exit if we done, otherwise loop again
 		process(data);
 		if(is_last_chunk(data)) break;
 	}
