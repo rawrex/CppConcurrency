@@ -4,23 +4,13 @@
 #include <iostream>
 #include "JThread.h"
 #include <functional>
+#include "RandomInt.h"
 #include "threadsafe_stack.h"
 
 // Type aliases for our operands
 using operands = std::pair<unsigned, unsigned>;
 using operands_stack = threadsafe_stack<operands>;
 
-// A functor that generates a random unsigned integer in the specified range 
-class RandomInt {
-	std::uniform_int_distribution<unsigned> dist;
-	std::default_random_engine engine;
-public:
-	RandomInt(std::size_t a, std::size_t b) : dist(a, b), engine(std::time(0)) {}
-	const unsigned operator()() 
-	{
-		return dist(engine);
-	}
-};
 
 // Make a safe stack with numbers to work with
 operands_stack makeStack(RandomInt ri, size_t n)
