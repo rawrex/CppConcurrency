@@ -30,13 +30,13 @@ int main() {
 
 	// Note the capture by value
 	JThread t2([ shared_future ]() {
-		print("t1: waiting");
+		print("t2: waiting");
 
 		// No race condition
         int value = *shared_future.get();
 
         std::ostringstream ss;
-        ss << "t1: " << value << "\n";
+        ss << "t2: " << value << "\n";
 		print(ss.str());
 	});
 
