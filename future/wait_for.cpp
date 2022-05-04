@@ -50,6 +50,7 @@ int main() {
 	{
 		print("Waiting attempt:", i);
 		auto status = future.wait_for(seconds(1));
+		// If the status is not a timeout, we are ready to get the value
 		if (status != std::future_status::timeout) break;
 	}
 

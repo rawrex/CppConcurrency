@@ -17,6 +17,12 @@ int main() {
 			// p.set_exception(...) has the argument type std::exception_ptr,
 			// so we cannot pass the std::runtime_error object instance directly.
 			p.set_exception(std::current_exception());
+
+			// If std::current_exception is called during exception handling 
+			// (typically, in a catch clause),
+			// captures the current exception object and creates an std::exception_ptr
+			// that holds either a copy or a reference to that exception object 
+			// (depending on the implementation)
         }
 	},
 	std::move(promise));

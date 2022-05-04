@@ -34,6 +34,7 @@ int main() {
 		// Wait until the future has a value set (void)
         f.wait();
 
+		// If we are here, we were notified by .set_value call
         print("\tWait is over. Start computation...");
         auto sum = std::accumulate(vector.begin(), vector.end(), 0LL);
         print("\tEnd of computation.");
@@ -46,6 +47,7 @@ int main() {
 	for (long long int i = 0; i < 1000; ++i)
 		Busy()();
 
+	// Prepare the data
 	print("Initializing the data");
 	for (long long int i = 0; i < 1000; ++i)
 		vector.push_back(Busy()());
