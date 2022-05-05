@@ -24,7 +24,8 @@ public:
 	packaged_task(std::function<Return (Args...)> func)
 		: function(std::move(func)) {}
 
-	void operator()(Args&&... args) {
+	void operator()(Args&&... args)
+	{
 		try
 		{
 			promise.set_value(function(std::forward<Args&&>(args)...));
@@ -41,11 +42,7 @@ public:
 	}
 };
 
-
-int compute(int a, int b)
-{
-	return 42 + a + b;
-}
+int compute(int a, int b) { return a + b; }
 
 int main() {
 
