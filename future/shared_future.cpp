@@ -14,10 +14,10 @@ void print(const std::string& msg, int i = 0)
 int main() {
 	std::promise<std::unique_ptr<int>> promise;
 	// Explicit std::future object that's shared later
-	// std::future<std::unique_ptr<int>> future = promise.get_future();
-	// std::shared_future<std::unique_ptr<int>> shared_future = future.share();
-	// Or shorter, direct std::shared_future construction
-	std::shared_future<std::unique_ptr<int>> shared_future(promise.get_future());
+	auto future = promise.get_future();
+	auto shared_future = future.share();
+	// Or a direct std::shared_future construction
+	// std::shared_future<std::unique_ptr<int>> shared_future(promise.get_future());
 
 	// Note the capture by value
 	JThread t1([ shared_future ]() {
