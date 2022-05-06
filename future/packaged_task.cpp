@@ -5,6 +5,8 @@
 // To resolve the interface gap, we have the std::packaged_task class.
 // It has a get_future mem.func to return a std::future object to receive a return value.
 // It also defines an operator(), to call the original function.
+//
+// In effect, std::packaged_task<> ties a future to a function or callable object. 
 
 #include <iostream>
 #include <exception>

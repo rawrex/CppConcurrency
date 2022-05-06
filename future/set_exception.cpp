@@ -12,7 +12,7 @@ int main() {
 		{
 			throw std::runtime_error("In-thread exception");
 		} 
-		catch (...)
+		catch (const std::exception& e)
 		{
 			// p.set_exception(...) has the argument type std::exception_ptr,
 			// so we cannot pass the std::runtime_error object instance directly.
@@ -23,6 +23,9 @@ int main() {
 			// captures the current exception object and creates an std::exception_ptr
 			// that holds either a copy or a reference to that exception object 
 			// (depending on the implementation)
+
+			// An alternative approach is to use the std::make_exception_ptr() 
+			// p.set_exception(std::make_exception_ptr(std::runtime_error("In-thread exception")));
         }
 	},
 	std::move(promise));
