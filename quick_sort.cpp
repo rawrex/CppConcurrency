@@ -59,8 +59,8 @@ template<typename T>
 	// We take a reference to avoid copying in comparisons
 	const T& pivot = *result.begin();
 
-	// This still does a lot of the work,
-	// and that’s still a sequential call, but it’s good enough for now...
+	// This still does a lot of the work sequentially 
+	// but it’s good enough for now...
 	auto divide_point = 
 		std::partition(input.begin(), input.end(),
 			[&](const T& t){ return t < pivot; });
