@@ -7,12 +7,13 @@ template<typename T>
 		return input;
 
 	std::list<T> result;
-	result.splice(result.begin(),input,input.begin());
-	T const& pivot=*result.begin();
+ 
+	result.splice(result.begin(), input, input.begin());
+	const T& pivot = *result.begin();
 
 	auto divide_point = 
-		std::partition(input.begin(),input.end(),
-			[&](T const& t){return t<pivot;});
+		std::partition(input.begin(), input.end(),
+			[&](const T& t){ return t < pivot; });
 
 	std::list<T> lower_part;
 
@@ -21,8 +22,8 @@ template<typename T>
 	auto new_lower(sequential_quick_sort(std::move(lower_part)));
 	auto new_higher(sequential_quick_sort(std::move(input)));
 
-	result.splice(result.end(),new_higher);
-	result.splice(result.begin(),new_lower);
+	result.splice(result.end(), new_higher);
+	result.splice(result.begin(), new_lower);
 
 	return result;
 }
