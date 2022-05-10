@@ -8,7 +8,12 @@ class DataChunk {};
 std::mutex mtx;
 std::queue<DataChunk> data_queue;
 std::condition_variable data_cond;
-bool there_is_more_data() { return true; }
+bool there_is_more_data() 
+{ 
+	static unsigned counter = 4;
+	--counter;
+	return counter;
+}
 bool is_last_chunk(const DataChunk&) { return true; }
 void process(const DataChunk & dt) {}
 const DataChunk prepare_data() { return DataChunk(); }
@@ -23,6 +28,7 @@ void data_preparation_thread()
 		// Narrow down the scope in which we lock the mutex
 		{	
 			std::lock_guard<std::mutex> lk(mtx);
+			std::cout << "data_queue.push(data)" << std::endl;
 			data_queue.push(data);
 		}
 
@@ -40,7 +46,7 @@ void data_processing_thread()
 		std::unique_lock<std::mutex> lk(mtx);
 
 		// We pass the lock and lambda that expresses the condition we wait on 
-		data_cond.wait(lk, []{ 
+		data_cond.wait(lk, [](){ 
 			// The condition may be tested intermedaite amount of times
 			// Due to spurious wakes
 			std::cout << "wait()" << std::endl; 
