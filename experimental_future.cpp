@@ -10,20 +10,21 @@
 // As always, std::experimental::future only allows the stored value to be retrieved once.
 // If that value is being consumed by a continuation, it cannot be accessed by other code.
 
-std::future<int> find_the_answer() 
+std::experimental::future<int> find_the_answer() 
 {
 	return std::experimental::future<int>();
 }
 
 
 // Our continuation function
-// Unlike direct calls to std::async or std::thread, you cannot pass arguments to a continuation function,
-// because the argument is already defined by the library it is passed a ready future that holds the result 
-// that triggered the continuation.
+// Unlike direct calls to std::async or std::thread,
+// you cannot pass arguments to a continuation function,
+// because the argument is already defined by the library it is passed a ready future 
+// that holds the result that triggered the continuation.
 // Assuming your find_the_answer function returns an int,
 // this function must take a std::experimental::future<int> as its sole parameter:
 
-std::future<int> find_the_question(std::experimental::future<int> fut_int);
+std::experimental::future<int> find_the_question(std::experimental::future<int> fut_int);
 {
 	return std::experimental::future<int>();
 }
