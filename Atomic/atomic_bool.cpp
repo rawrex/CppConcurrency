@@ -22,7 +22,7 @@ int main() {
 	// error: use of deleted function ‘std::atomic<bool>::atomic(const std::atomic<bool>&)’
 	// auto b4 = atom_b;
 
-	atom_b = false;		// Same as .load()
+	atom_b = false;		// Same as .store()
 	bool b = atom_b;
 	std::cout << b << std::endl;
 
