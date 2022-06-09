@@ -17,7 +17,7 @@ int main() {
 
 	bool b1 = atom_b.load();
 	auto b2 = atom_b.load();
-	bool b3 = atom_b;	// Same as .store()
+	bool b3 = atom_b;	// Same as .load()
 
 	// error: use of deleted function ‘std::atomic<bool>::atomic(const std::atomic<bool>&)’
 	// auto b4 = atom_b;
@@ -26,9 +26,10 @@ int main() {
 	bool b = atom_b;
 	std::cout << b << std::endl;
 
-	// exchange() isn’t the only read-modify-write operation supported by std::atomic<bool>;
-	// it also has an operation to store a new value if the current is equal to some expected
 	b = atom_b.exchange(true, std::memory_order_acq_rel);
 	std::cout << b << std::endl;
 
+	// exchange() isn’t the only read-modify-write operation supported by std::atomic<bool>;
+	// it also has an operation to store a new value if the current is equal to some expected
+	// More in the 'compare_exchange.cpp'
 }
