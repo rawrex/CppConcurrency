@@ -33,4 +33,22 @@ int main() {
 
 	// On the other hand, compare_exchange_strong() is guaranteed to return false 
 	// only if the value wasn’t equal to the expected value.
+	// ...
+
+
+
+	// Why would we want to use weak in a loop instead of strong?
+	//
+	// Spurious failures are not that often, it's not a big performance hit.
+	// In constrast, strong must always check for spurious failure and mask it. Expensive.
+	// Thus, weak is used because it is a lot faster than strong on some platforms.
+
+
+	// When should you use weak and when strong?
+	//
+	// When a compare-and-exchange is in a loop anyway, by means of logic (not necessity).
+	// The weak version will yield better performance on some platforms, so the rule of thumb is:
+	//	- If you would have to introduce a loop only because of spurious failure, use strong.
+	//	- If you have a loop anyway, then use weak.
+
 }
