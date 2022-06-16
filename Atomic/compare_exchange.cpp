@@ -15,21 +15,18 @@ int main() {
 	// the store might not be successful even if the original value was equal to the expected,
 	// in which case the value of the variable is unchanged and the return value of operation is false.
 	// This is most likely to happen on machines that lack a single compare-and-exchange instruction,
-	// if the processor can’t guarantee that the operation has been done atomically.
-	// Possibly because the thread performing the operation was switched out in the middle 
-	// of the necessary sequence of instructions and another thread scheduled in its place
-	// by the OS where there are more threads than processors.
-	// This is called a spurious failure,
-	// because the reason for the failure is a function of timing rather than the values.
+	// in which case, the processor can’t guarantee that the operation will be done atomically.
+	// Possibly because the thread performing the operation can be switched out in the middle 
+	// of the necessary sequence of instructions and another thread scheduled in its place.
+	// So called spurious failure, since the reason for the failure is a function of timing, not vlaues.
 
-	// Because compare_exchange_weak() can fail spuriously, it must typically be used in a loop:
 
 	bool expected = true;
-	std::atomic<bool> b(false);	// set somewhere else
-
+	std::atomic<bool> b(false);
 		
 	JThread t1([&]()
 	{
+		// Because compare_exchange_weak() can fail spuriously, it must typically be used in a loop:
 		while(!b.compare_exchange_weak(expected,false) && !expected)
 			std::cout << "t2" << std::endl;
 	});
