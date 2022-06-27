@@ -1,6 +1,3 @@
-#include <iostream>
-
-
 // LL/SC
 //
 // Load-link returns the current value of a memory location,
@@ -14,15 +11,15 @@
 // such as a context switch, another load-link, or even (on many platforms)
 // another load or store operation, will cause the store-conditional to spuriously fail.
 // Older implementations will fail if there are any updates broadcast over the memory bus.
+// This is called weak LL/SC by researchers.
 
 // Comparison of LL/SC and compare-and-swap
+//
 // If any updates have occurred, the store-conditional is guaranteed to fail,
 // even if the value read by the load-link has since been restored.
 // As such, an LL/SC pair is stronger than a read followed by a compare-and-swap (CAS),
-// which will not detect updates if the old value has been restored. 
+// which will not detect updates if the old value has been restored (the ABA problem).
 
-
-
-int main() {
-
-}
+// Nevertheless, LL/SC is equivalent to CAS 
+// in the sense that either primitive can be implemented in terms of the other,
+// in O(1) and in a wait-free manner.
