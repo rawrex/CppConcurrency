@@ -20,7 +20,7 @@ int main() {
 	// in which case, the processor can’t guarantee that the operation will be done atomically.
 	// Possibly because the thread performing the operation can be switched out in the middle 
 	// of the necessary sequence of instructions and another thread scheduled in its place.
-	// So called spurious failure, since the reason for the failure is a function of timing, not vlaues.
+	// This is called spurious failure, since the reason for the failure is a function of timing, not vlaues.
 
 
 	bool expected = true;
@@ -32,7 +32,7 @@ int main() {
 		// Because compare_exchange_weak() can fail spuriously, it must typically be used in a loop:
 		while(!b.compare_exchange_weak(expected,false) && !expected);
 
-		// Why do we need !expected check?
+		// Why do we need the "!expected" check?
 		//
 		// Omitting it would yield a very similar semantics.
 		// Only in a case where another thread might reset the value to false,
@@ -45,9 +45,10 @@ int main() {
 	});
 
 
-	// On platforms that no single hardware CAS instruction exist,
-	// both the weak and strong version are implemented using LL/SC (like ARM, PowerPC, etc).
-	// So is there any difference between the following two loops?
+	// On platforms where no single hardware CAS (Compare-And-Swap) instruction exist,
+	// both the weak and strong version are implemented using LL/SC (Load-Link/Store-Conditional)
+	// Such systems as ARM, PowerPC, etc.
+	// So we can ask, is there any difference between the following two loops?
 
 	// use LL/SC (or CAS on x86) and ignore/loop on spurious failures
 	while (!compare_exchange_weak(..))		/* empty */;
@@ -55,10 +56,10 @@ int main() {
 	// use LL/SC (or CAS on x86) and ignore/loop on spurious failures
 	while (!compare_exchange_strong(..))	/* empty */;
 
-	// E.g. We know that real LL/SC well may fail spuriously on context switch (see ./CE_LLSC_CAS.cpp).
+	// E.g. We know that real LL/SC well may fail spuriously on context switch (see file: ./CE_LLSC_CAS.cpp).
 	// The strong would bring its own "loop" to detect a spurious failure and mask it.
-	// Note that this loop is also more complicated
-	// (it must distinguish between spurious failure and mask it, and failure due to concurrent access).
+	// Note that this loop is also more complicated than a usual CAS loop
+	// since it must distinguish between spurious failure and mask it, and failure due to concurrent access.
 	// ...
 
 
