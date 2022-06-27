@@ -60,25 +60,31 @@ int main() {
 	// The strong would bring its own "loop" to detect a spurious failure and mask it.
 	// Note that this loop is also more complicated than a usual CAS loop
 	// since it must distinguish between spurious failure and mask it, and failure due to concurrent access.
-	// ...
+	// The weak version does not have such inner mechanism.
+	//
+	// So, in the above example, the strong version will do the same check twice:
+	// Once in the inner mechanims and once in our explicit loop.
+	// Thus, the weak verison has more chances on giving a better performance.
+	//
+	// So in a nutshell, C++ gives you two semantics,
+	// a "best effort" one (weak) and a "I will do it for sure,
+	// no matter how many bad things might happen inbetween" one (strong).
 
 
-	// On the other hand, compare_exchange_strong() is guaranteed to return false 
-	// only if the value wasn’t equal to the expected value.
-	// ...
+	// Note, we should not tie our mental model to the implementation on our specific platform;
+	// the standard library is designed to work with more architectures than you might be aware of.
 
 
-
+	// As a bottom line:
 	// Why would we want to use weak in a loop instead of strong?
 	//
 	// Spurious failures are not that often, it's not a big performance hit.
 	// In constrast, strong must always check for spurious failure and mask it. Expensive.
 	// Thus, weak is used because it is a lot faster than strong on some platforms.
 
-
 	// When should you use weak and when strong?
 	//
-	// When a compare-and-exchange is in a loop anyway, by means of logic (not necessity).
+	// When a compare-and-exchange is in a loop anyway, by means of logic (not technical necessity).
 	// The weak version will yield better performance on some platforms, so the rule of thumb is:
 	//	- If you would have to introduce a loop only because of spurious failure, use strong.
 	//	- If you have a loop anyway, then use weak.
