@@ -72,17 +72,19 @@ while (a.load() == x)		a.store(1)
 // to remove code which does not affect the program results).
 
 // Thread 1
-y.store(20, memory_order_relaxed)
-x.store(10, memory_order_relaxed)
+x.store(10, memory_order_relaxed);
+y.store(20, memory_order_relaxed);
 
 // Thread 2
 if (x.load(memory_order_relaxed) == 10)
 {
-	assert(y.load(memory_order_relaxed) == 20)	// assert A 
-	y.store(10, memory_order_relaxed)
+	assert(y.load(memory_order_relaxed) == 20);		// assert A 
+	y.store(10, memory_order_relaxed);
 }
 
 // Thread 3
-if (y.load(memory_order_relaxed) == 10)
-  assert(x.load(memory_order_relaxed) == 10)	// assert B
+if (y.load(memory_order_relaxed) == 10);
+	assert(x.load(memory_order_relaxed) == 10);		// assert B
+
+// Since these three threads are not synced, either of the assertions may fail.
 
