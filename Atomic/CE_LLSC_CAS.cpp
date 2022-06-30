@@ -7,9 +7,9 @@
 // 
 // Real implementations of LL/SC do not always succeed
 // if there are no concurrent updates to the memory location in question.
-// Any exceptional events between the two operations,
-// such as a context switch, another load-link, or even (on many platforms)
-// another load or store operation, will cause the store-conditional to spuriously fail.
+// Any exceptional events between the two operations, such as a context switch, another load-link,
+// or even (on many platforms) another load or store operation,
+// will cause the store-conditional to spuriously fail.
 // Older implementations will fail if there are any updates broadcast over the memory bus.
 // This is called weak LL/SC by researchers.
 
