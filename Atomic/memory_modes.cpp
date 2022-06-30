@@ -9,7 +9,7 @@
 
 // Each atomic class has a load() and a store() operation which is utilized to perform assignments:
 
-atomic_var1.store (atomic_var2.load()		// atomic variables
+atomic_var1.store (atomic_var2.load());		// atomic variables
 											// vs
 var1 = var2;								// regular variables
 
