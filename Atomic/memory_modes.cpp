@@ -1,3 +1,5 @@
+#include <atomic>
+
 // Source: https://gcc.gnu.org/wiki/Atomic/GCCMM/AtomicSync
 // Atomic variables are primarily used to synchronize shared memory accesses between threads.
 
@@ -10,9 +12,9 @@
 
 // Each atomic class has a load() and a store() operation which is utilized to perform assignments:
 
-atomic_var1.store (atomic_var2.load());		// atomic variables
+atom_int_a.store(atom_int_b.load());		// atomic variables
 											// vs
-var1 = var2;								// regular variables
+int_a = int_b;								// regular variables
 
 // These operations also have a second optional parameter 
 // which is used to specify the memory model mode to use for synchronization.
@@ -69,4 +71,18 @@ while (a.load() == x)		a.store(1)
 // such as dead store removal (a.k.a. DCE, dead-code elimination, is a compiler optimization
 // to remove code which does not affect the program results).
 
+// Thread 1
+y.store(20, memory_order_relaxed)
+x.store(10, memory_order_relaxed)
+
+// Thread 2
+if (x.load(memory_order_relaxed) == 10)
+{
+	assert(y.load(memory_order_relaxed) == 20)	// assert A 
+	y.store(10, memory_order_relaxed)
+}
+
+// Thread 3
+if (y.load(memory_order_relaxed) == 10)
+  assert(x.load(memory_order_relaxed) == 10)	// assert B
 

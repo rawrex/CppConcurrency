@@ -3,7 +3,7 @@
 #include "../JThread.h"
 
 int main() {
-	std::atomic<char> ch = 'x';	
+	std::atomic_char ch = 'x';	
 
 	JThread t1([&ch]
 	{
