@@ -1,4 +1,4 @@
-// LL/SC
+// LL/SC (Load-Link/Store-Conditinal)
 //
 // Load-link returns the current value of a memory location,
 // while a subsequent store-conditional to the same memory location will store a new value
@@ -13,7 +13,7 @@
 // Older implementations will fail if there are any updates broadcast over the memory bus.
 // This is called weak LL/SC by researchers.
 
-// Comparison of LL/SC and compare-and-swap
+// Comparison of LL/SC and Compare-and-Swap
 //
 // If any updates have occurred, the store-conditional is guaranteed to fail,
 // even if the value read by the load-link has since been restored.
