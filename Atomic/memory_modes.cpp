@@ -87,4 +87,21 @@ if (y.load(memory_order_relaxed) == 10);
 	assert(x.load(memory_order_relaxed) == 10);		// assert B
 
 // Since these three threads are not synced, either of the assertions may fail.
+// Without any happens-before edges, no thread can count on a specific ordering from another thread.
+// The only ordering imposed is that once a value for a variable from Thread 1 is observed in Thread 2,
+// Thread 2 can not see an “earlier” value for that variable from Thread 1. ie, assuming 'x' is initially 0:
 
+// Thread 1
+x.store(1, memory_order_relaxed)
+x.store(2, memory_order_relaxed)
+
+// Thread 2
+y = x.load(memory_order_relaxed)
+z = x.load(memory_order_relaxed)
+
+// The assert cannot fail
+// Once the store of 2 is seen by Thread 2, it can no longer see the value 1
+assert(y <= z);	
+
+// The relaxed mode is most commonly used when we want a variable to be atomic in nature
+// rather than using it to synchronize threads for other shared memory data.
