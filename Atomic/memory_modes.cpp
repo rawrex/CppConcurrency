@@ -22,7 +22,7 @@ int_a = int_b;								// regular variables
 // There are 3 modes:
 //	1) Sequentially Consistent
 //	2) Relaxed
-//	3) Acquire/Release (hybrid of the two above)
+//	3) Acquire/Release
 
 
 // Sequentially Consistent
@@ -109,4 +109,25 @@ assert(y <= z);
 
 // Acquire/Release
 //
-// 
+// The third mode is a hybrid between the other two, but is more similar to the sequentially consistent,
+// except it only applies a happens-before relationship to dependent variables.
+// This allows for a relaxing of the syncing required between independent reads of independent writes.
+
+std::atomic_int x = 0, y = 0;
+
+// Thread 1
+y.store(20, memory_order_release);
+
+// Thread 2
+x.store(10, memory_order_release);
+
+// Thread 3
+assert(y.load(memory_order_acquire) == 20 && x.load(memory_order_acquire) == 0)
+
+// Thread 4
+assert(y.load(memory_order_acquire) == 0 && x.load(memory_order_acquire) == 10)
+
+// Both of these asserts can pass
+// Since there is no ordering imposed between the stores in Thread 1 and Thread 2.
+
+
