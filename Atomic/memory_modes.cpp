@@ -30,6 +30,14 @@ var1 = var2;								// regular variables
 // It provides the same restrictions and limitation to moving loads around 
 // that sequential programmers are inherently familiar with, except it applies across threads.
 
--Thread 1-       -Thread 2-
- y = 1            if (x.load() == 2)
- x.store (2);        assert (y == 1)
+// Thread 1			// Thread 2
+y = 1				if (x.load() == 2)
+x.store (2);			assert (y == 1);
+
+// Although x and y are unrelated variables, the memory model specifies that the assert cannot fail.
+// The store to 'y' happens-before the store to x in Thread 1.
+// If the load of 'x' in Thread 2 gets the results of the store that happened in Thread 1,
+// it must see ALL operations that happened before the store in Thread 1, even unrelated ones.
+// Thus, the optimizer is not free to reorder the two stores in Thread 1,
+// since Thread 2 must see the store to Y as well.
+
