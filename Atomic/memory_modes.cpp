@@ -105,3 +105,8 @@ assert(y <= z);
 
 // The relaxed mode is most commonly used when we want a variable to be atomic in nature
 // rather than using it to synchronize threads for other shared memory data.
+
+
+// Acquire/Release
+//
+// 
