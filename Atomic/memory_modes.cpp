@@ -129,5 +129,29 @@ assert(y.load(memory_order_acquire) == 0 && x.load(memory_order_acquire) == 10)
 
 // Both of these asserts can pass
 // Since there is no ordering imposed between the stores in Thread 1 and Thread 2.
+// If this example were written using the sequentially consistent model,
+// then one of the stores MUST happen-before the other.
+
+// To make matters a bit more complex, the interactions of non-atomic variables are still the same.
+// Any store before an atomic operation must be seen in other threads that synchronize.
+// For example:
+
+// Thread 1
+y = 20;
+x.store(10, memory_order_release);
+
+// Thread 2
+if(x.load(memory_order_acquire) == 10)
+assert(y == 20);
+
+// Since 'y' is not an atomic variable, the "store" to 'y' happens-before the store to 'x',
+// so the assert cannot fail in this case.
+// The optimizers must still limit the operations performed on shared memory variables
+// around atomic operations.
 
 
+// Consume
+//
+// std:memory_order_consume is a further subtle refinement in the release/acquire memory model
+// that relaxes the requirements slightly
+// by removing the happens before ordering on non-dependent shared variables as well.
