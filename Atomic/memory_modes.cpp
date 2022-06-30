@@ -16,10 +16,14 @@ var1 = var2;								// regular variables
 // These operations also have a second optional parameter 
 // which is used to specify the memory model mode to use for synchronization.
 
-// There are 3 modes 
+// There are 3 modes:
+//	1) Sequentially Consistent
+//	2) Relaxed
+//	3) Acquire/Release (hybrid of the two above)
+
 
 // Sequentially Consistent
-
+//
 // This is the default mode used when none is specified, and it is the most restrictive.
 // It can also be explicitly specified via std::memory_order_seq_cst.
 // It provides the same restrictions and limitation to moving loads around 
