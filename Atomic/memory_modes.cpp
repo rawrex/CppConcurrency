@@ -79,9 +79,11 @@ while (a.load() == x)		a.store(1)
 // Thus, we use relaxed for anything 
 // that doesn't try to use an atomic variable to synchronize access to non-atomic data.
 //
+// E.g. operations on shared_ptrs that increment the reference count internally use relaxed.
+//
 // std::memory_order_relaxed allows for much less syncing by removing the happens-before restrictions.
 // These types of atomic operations can also have various optimizations performed on them,
-// (e.g., dead store removal, a.k.a. DCE, dead-code elimination, 
+// (e.g., dead store removal, a.k.a. DCE, dead-code elimination)
 
 // Thread 1
 x.store(10, memory_order_relaxed);
