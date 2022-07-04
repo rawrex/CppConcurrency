@@ -155,3 +155,46 @@ assert(y == 20);
 // std:memory_order_consume is a further subtle refinement in the release/acquire memory model
 // that relaxes the requirements slightly
 // by removing the happens before ordering on non-dependent shared variables as well.
+// Though, apparently no major compiler implements it,
+// and they silently replace it with a stronger memory_order_acquire.
+// Even the standard itself says to avoid it.
+//
+// http://eel.is/c++draft/atomics.order#note-1
+
+
+// Summary
+// Its actually not as complex as it sounds, so in an attempt to un-glaze your eyes,
+// examine this case for each of the different memory models:
+
+// Thread 1					// Thread 2						// Thread 3
+y.store(20);				if (x.load() == 10) {			if (y.load() == 10)
+x.store(10);					assert(y.load() == 20)			assert(x.load() == 10)
+								y.store(10)
+							}
+
+
+// When 2 threads synchronize in sequentially consistent mode,
+// all the visible variables must be flushed through the system so that all threads see the same state.
+// Both asserts must therefore be true.
+//
+// Release/Acquire mode only requires the two threads involved to be synchronized.
+// This means that synchronized values are not commutative to other threads.
+// I.e. (1 sync 2 && 2 sync 3) != (1 sync 3)
+// The assert in thread 2 must still be true since thread 1 and 2 synchronize with x.load().
+// Thread 3 is not involved in this synchronization, so when thread 2 and 3 synchronize with y.load(),
+// thread 3's assert can fail.
+// There has been no synchronization between threads 1 and 3, so no value can be assumed for 'x' there.
+//
+// If the stores are release and loads are consume the results are the same as release/acquire
+// except there may be less hardware synchronization required.
+// Why not always use consume?
+// Among the other reasons, (see above)
+// the reason is that this example doesn't have any shared memory being synchronized.
+// You may not see the values of any shared memory before the stores in the synchronization
+// unless it is a parameter to the store.
+// I.e., its only a synchronization on shared memory variables used to calculate the store value.
+//
+// If everything were relaxed, then both asserts can fail because there is no synchronization at all.
+
+
+// As to mixing memory models - don't do it, it rarely makes sense and is too hard to grasp.
