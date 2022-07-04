@@ -122,10 +122,13 @@ assert(y <= z);
 
 // Acquire/Release
 //
-// The third mode is a hybrid between the other two, but is more similar to the sequentially consistent,
+// These do everything relaxed does, and more (so it's supposedly slower or equivalent).
+// It is a hybrid between the other two (sequentially consistent and relaxed),
+// but is more similar to the sequentially consistent,
 // except it only applies a happens-before relationship to dependent variables.
-// This allows for a relaxing of the syncing required between independent reads of independent writes.
+//
 
+// E.g.
 std::atomic_int x = 0, y = 0;
 
 // Thread 1
@@ -161,6 +164,22 @@ assert(y == 20);
 // so the assert cannot fail in this case.
 // The optimizers must still limit the operations performed on shared memory variables
 // around atomic operations.
+
+// Allows for a relaxing of the syncing required between independent reads of independent writes.
+// Only stores (writes) can use release. Only loads (reads) can use acquire.
+// Read-modify-write operations can be both (memory_order_acq_rel), but they don't have to.
+//
+// Those let you synchronize threads:
+//	- Let's say Thread 1 reads/writes to some memory M 
+//	  (non-atomic or atomic variables, doesn't matter);
+//	- Then Thread 1 performs a release store to a variable A
+//	  Then it stops touching that memory;
+//	- If Thread 2 then performs an acquire load of the same variable A,
+//	  this load is said to synchronize with the corresponding store in Thread 1;
+//	- Now Thread 2 can safely read/write to that memory M.
+//
+// You only synchronize with the latest writer, not preceding writers.
+// You can chain synchronizations across multiple threads.
 
 
 // Consume
