@@ -1,8 +1,8 @@
 #include <atomic>
 
 // Source: https://gcc.gnu.org/wiki/Atomic/GCCMM/AtomicSync
-// Atomic variables are primarily used to synchronize shared memory accesses between threads.
 
+// Atomic variables are primarily used to synchronize shared memory accesses between threads.
 // Typically one thread creates data, then stores to an atomic.
 // Other threads read from this atomic, and when the expected value is seen,
 // the data the other thread was creating is going to be complete and visible in this thread.
