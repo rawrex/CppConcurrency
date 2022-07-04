@@ -65,7 +65,7 @@ while (a.load() == x)		a.store(1)
 
 // Relaxed
 //
-// The opposite approach is .
+// The opposite approach to the above.
 // std::memory_order_relaxed allows for much less syncing by removing the happens-before restrictions.
 // These types of atomic operations can also have various optimizations performed on them,
 // such as dead store removal (a.k.a. DCE, dead-code elimination, is a compiler optimization
