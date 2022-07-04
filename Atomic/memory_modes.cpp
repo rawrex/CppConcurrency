@@ -66,10 +66,22 @@ while (a.load() == x)		a.store(1)
 // Relaxed
 //
 // The opposite approach to the above.
+//
+// Any reads/writes to atomics are safe from data races.
+// Relaxed provides just this minimal guarantee, for a single variable.
+// It doesn't provide any guarantees for other variables (atomic or not).
+//
+// All threads agree on the order of operations on every particular atomic variable.
+// But it's the case only for invididual variables.
+// It's as if relaxed operations propagate between threads with slight unpredictable delays.
+// So, for other variables (atomic or not),
+// there still may be different ways to interleave operations on them.
+// Thus, we use relaxed for anything 
+// that doesn't try to use an atomic variable to synchronize access to non-atomic data.
+//
 // std::memory_order_relaxed allows for much less syncing by removing the happens-before restrictions.
 // These types of atomic operations can also have various optimizations performed on them,
-// such as dead store removal (a.k.a. DCE, dead-code elimination, is a compiler optimization
-// to remove code which does not affect the program results).
+// (e.g., dead store removal, a.k.a. DCE, dead-code elimination, 
 
 // Thread 1
 x.store(10, memory_order_relaxed);
@@ -81,7 +93,6 @@ if (x.load(memory_order_relaxed) == 10)
 	assert(y.load(memory_order_relaxed) == 20);		// assert A 
 	y.store(10, memory_order_relaxed);
 }
-
 // Thread 3
 if (y.load(memory_order_relaxed) == 10);
 	assert(x.load(memory_order_relaxed) == 10);		// assert B
