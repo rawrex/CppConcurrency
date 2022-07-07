@@ -165,10 +165,9 @@ assert(y == 20);
 // The optimizers must still limit the operations performed on shared memory variables
 // around atomic operations.
 
-// Allows for a relaxing of the syncing required between independent reads of independent writes.
+// This mode allows for a relaxing of the syncing required between independent reads of independent writes.
 // Only stores (writes) can use release. Only loads (reads) can use acquire.
 // Read-modify-write operations can be both (memory_order_acq_rel), but they don't have to.
-//
 // Those let you synchronize threads:
 //	- Let's say Thread 1 reads/writes to some memory M 
 //	  (non-atomic or atomic variables, doesn't matter);
