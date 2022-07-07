@@ -127,7 +127,6 @@ assert(y <= z);
 // It is a hybrid between the other two (sequentially consistent and relaxed),
 // but is more similar to the sequentially consistent,
 // except it only applies a happens-before relationship to dependent variables.
-//
 
 // E.g.
 std::atomic_int x = 0, y = 0;
