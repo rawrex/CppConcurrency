@@ -12,9 +12,10 @@
 
 // Each atomic class has a load() and a store() operation which is utilized to perform assignments:
 
-atom_int_a.store(atom_int_b.load());		// atomic variables
+atom_int_a.store(atom_int_b.load());		// atomic variables (also have operator= overload)
 											// vs
 int_a = int_b;								// regular variables
+
 
 // These operations also have a second optional parameter 
 // which is used to specify the memory model mode to use for synchronization.
