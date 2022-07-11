@@ -44,8 +44,10 @@ assert(p.load() == &some_array[1]); 	// Passes
 
 
 // Note, the function forms allows for the memory-ordering semantics to be specified:
-
 p.fetch_add(3, std::memory_order_release);
+
+// While specifying the ordering semantics isn’t possible for the operator forms.
+// These forms therefore always have memory_order_seq_cst semantics.
 
 
 int main() {
