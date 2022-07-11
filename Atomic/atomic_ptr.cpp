@@ -31,13 +31,15 @@ std::atomic<Foo*> p(some_array);
 
 Foo* x = p.fetch_add(2);				// Add 2 to the p 
 										// And return the value that was there before that
-assert(x == some_array);
-assert(p.load() == &some_array[2]);
+
+assert(x == some_array);				// Passes
+assert(p.load() == &some_array[2]);		// Passes
 
 x = (p -= 1);							// Subtract 1 from the p
 										// And return the value that is present after that
-assert(x == &some_array[1]);
-assert(p.load() == &some_array[1])
+
+assert(x == &some_array[1]);			// Passes
+assert(p.load() == &some_array[1]); 	// Passes
 
 
 
