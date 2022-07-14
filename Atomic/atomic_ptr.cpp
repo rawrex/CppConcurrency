@@ -23,8 +23,8 @@
 //
 // This operation is also known as exchange-and-add, and it’s an atomic read-modify-write operation,
 // like exchange() and compare_exchange_weak()/compare_exchange_strong().
-// As with the other operations,
-// the return value is a plain T* value rather than a reference to the std::atomic<T*> object.
+// As with the other operations, the return value is a plain T* value 
+// rather than a reference to the std::atomic<T*> object.
 
 class Foo{};
 Foo some_array[5];
