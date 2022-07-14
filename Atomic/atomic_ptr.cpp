@@ -1,4 +1,5 @@
 #include <iostream>
+#include <atomic>
 
 // Like std::atomic<bool>, it’s neither copy-constructible nor copy-assignable,
 // although it can be both constructed and assigned from the suitable pointer values.
@@ -16,7 +17,7 @@
 //
 // E.g. if x is std::atomic<Foo*> to the first entry of an array of Foo objects,
 // then x+=3 makes it to point to the 4th entry and returns a plain Foo* that points to that 4th entry.
-// fetch_add() and fetch_sub() are slightly different in that they return the original value
+// fetch_add() and fetch_sub() return the original value and then modify the position of the pointer
 // (x.fetch_add(3) will update x to point to the 4th value 
 // but will return a pointer to the first value in the array).
 //
