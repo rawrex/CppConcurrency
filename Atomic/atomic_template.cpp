@@ -71,6 +71,14 @@ std::atomic<HasVirtualFunction> failed_atomic;
 // These paltforms are those that support double-word-compare-and-swap (DWCAS)
 // instruction corresponding to the compare_exchange_xxx functions.
 
+// So, you can’t, for example, create std::atomic<std::vector<int>>, but you can instantiate std::atomic<>
+// with classes containing counters or flags or pointers or even arrays of simple data elements.
+// This isn’t particularly a problem;
+// The more complex the data structure,
+// The more likely you’ll want to do operations on it other than simple assignment and comparison.
+// In such case, better off using an std::mutex.
+
+
 int main() {
 
 }
