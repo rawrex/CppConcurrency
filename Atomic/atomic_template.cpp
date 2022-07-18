@@ -62,6 +62,15 @@ std::atomic<HasVirtualFunction> failed_atomic;
 // and that operator differs from the comparison using memcmp()
 // the operation may fail because the otherwise-equal values have a different representation.
 
+
+// If your UserType is the same size as (or smaller than) an int or a void*,
+// most common platforms will be able to use atomic instructions for std::atomic<UserType>.
+//
+// Some platforms will also be able to use atomic instructions 
+// for user-defined types that are twice the size of an int or void*.
+// These paltforms are those that support double-word-compare-and-swap (DWCAS)
+// instruction corresponding to the compare_exchange_xxx functions.
+
 int main() {
 
 }
