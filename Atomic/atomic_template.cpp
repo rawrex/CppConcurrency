@@ -56,6 +56,11 @@ std::atomic<HasVirtualFunction> failed_atomic;
 //
 // The operation may fail even though the old stored value was equal in value to the comparand,
 // if the stored value had a different REPRESENTATION.
+//
+// You’ll get similar behavior with compare_exchange_strong 
+// if you use std::atomic<> with a user-defined type that has an equality-comparison operator defined,
+// and that operator differs from the comparison using memcmp()
+// the operation may fail because the otherwise-equal values have a different representation.
 
 int main() {
 
