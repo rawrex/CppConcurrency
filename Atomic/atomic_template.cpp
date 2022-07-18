@@ -39,6 +39,24 @@
 // (and make a particular instantiation lock-free),
 // because it can treat the user-defined type as a set of raw bytes.
 
+class HasVirtualFunction
+{
+public:
+	// The class does have a virtual function
+	virtual void function() const {}
+};
+// error: static assertion failed: std::atomic requires a trivially copyable type
+std::atomic<HasVirtualFunction> failed_atomic;
+
+
+// Note that although you can use std::atomic<float> or std::atomic<double>,
+// because the built-in floating point types do satisfy the criteria for use with memcpy and memcmp,
+// the behavior may be surprising in the case of compare_exchange_strong
+// (compare_exchange_weak can always fail for arbitrary internal reasons, as described previously).
+//
+// The operation may fail even though the old stored value was equal in value to the comparand,
+// if the stored value had a different REPRESENTATION.
+
 int main() {
 
 }
