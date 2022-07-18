@@ -3,6 +3,8 @@
 
 // Given a user-defined type UserType,
 // std::atomic<UserType> provides the same interface as std::atomic<bool>.
+// load(), store(), exchange() , compare_exchange_weak(), compare_exchange_strong(),
+// and assignment from and conversion to an instance of type T.
 //
 // There's a restriction, the type must have a trivial copy-assignment operator.
 // This means that the type must not have any virtual functions or virtual base classes 
